@@ -1,0 +1,10 @@
+{
+  "name": "mmk-cardnews",
+  "description": "Card news generator — create Instagram/LinkedIn visual slides with AI images, Remotion rendering, and video export",
+  "version": "2.0.0",
+  "author": { "name": "Magic Meal Kits" },
+  "homepage": "https://github.com/pureugong/mmk-cardnews-v2",
+  "repository": "https://github.com/pureugong/mmk-cardnews-v2",
+  "license": "MIT",
+  "setup": "./setup.sh"
+}

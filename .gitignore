@@ -1,0 +1,32 @@
+# Build
+dist/
+*.exe
+
+# Dependencies
+node_modules/
+
+# Output
+output/
+
+# Environment
+.env
+.env.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Go
+*.test
+*.out
+coverage.html
+
+# Fonts (downloaded via setup.sh)
+fonts/*.ttf
+fonts/*.woff2
