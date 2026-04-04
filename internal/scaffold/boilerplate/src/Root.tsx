@@ -71,7 +71,7 @@ export const RemotionRoot: React.FC = () => {
       <Composition
         id="CardStill"
         component={CardStill}
-        durationInFrames={1}
+        durationInFrames={150}
         fps={FPS}
         width={CARD_WIDTH}
         height={CARD_HEIGHT}

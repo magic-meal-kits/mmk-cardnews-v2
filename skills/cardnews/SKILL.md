@@ -91,9 +91,13 @@ Output: `{output}/plan.md`
 
 Plan includes:
 1. Card type (list/storytelling/focus/Q&A)
-2. Total slides (7-13)
-3. Per-card table: # | Part (cover/body/closing) | Message | Image description | Layout pattern (FullBleed/Split/TextOnly)
-4. Color mood based on topic
+2. **Magazine style** — auto-select from `{SKILL_DIR}/references/magazine-styles.md`:
+   - Concept/theme → BRUTUS | Lifestyle/city → POPEYE | Architecture/space → Casa BRUTUS
+   - Personal/vintage → OLIVE | Portrait/interview → SWITCH | Art/minimal → Pen
+   - Present recommended style + reason to user; user can override
+3. Total slides (7-13)
+4. Per-card table: # | Part (cover/body/closing) | Message | Image art direction (text zone, lighting) | Layout pattern (FullBleed/Split/TextOnly)
+5. Color palette → auto-determined from selected magazine style
 
 **Checkpoint** — AskUserQuestion:
 ```
@@ -134,10 +138,15 @@ Model: `gemini-3.1-flash-image-preview` (configurable via `GEMINI_MODEL`).
 mmk-cn imagegen --batch "{output}/batch.json" --aspect-ratio 3:4 --image-size 2K --env-file .env
 ```
 
-**Prompt rules**:
-- Start with: "DO NOT include any text, letters, words, numbers, watermarks, logos, or typography in the image. Pure visual only."
-- Full color editorial magazine photography
+**Aspect ratio note**: Canvas is 4:5 (1080x1350) but Gemini only supports 3:4 (closest match). The 3:4 image is slightly taller, so `objectFit: "cover"` will crop ~6% off left/right edges. When writing image prompts, **keep the main subject centered horizontally** and avoid placing important elements at the extreme left/right edges to prevent cropping.
+
+**Prompt rules** (see `{SKILL_DIR}/references/art-direction.md`):
+- Use **9-layer art-directed prompt structure**: composition → text zone → lighting → camera → color → subject → style → anti-AI → negative
+- Select prompt template from art-direction.md matching the chosen magazine style
+- Text zone must match card layout (FullBleed → lower 35% reserved, Cover → center safe zone)
+- Always append anti-AI base prompt (analog grain, no digital smoothing)
 - 200-400 word English prompt
+- Gemini responds well to: hex colors, film stock names, camera specs, zone language
 
 **Checkpoint** — AskUserQuestion:
 ```
@@ -151,10 +160,15 @@ This is the core creative step. Read `{SKILL_DIR}/references/card-template-guide
 
 For each card, write `src/cards/CardNN.tsx`:
 - Use `FullBleedCard`, `SplitCard`, or `TextOnlyCard` pattern from `CardTemplate.tsx`
+- **Import magazine style constants** from `../magazine-styles` (e.g., `import { POPEYE } from '../magazine-styles'`)
+- Apply style's palette, typography, and overlay gradients
 - Fill in actual content from plan.md
 - Reference images via `staticFile("card-NN.png")`
 - Include fade-in/fade-out animations via `interpolate()`
 - Page numbers: `N / {total}` at bottom center
+- **Anti-AI design**: minimize emoji (0-1 per card max), no gradient-only backgrounds, text ON image not in separate zone
+
+**Output language**: Default is Korean (polite form). If the user specifies a different language, use that instead. If unclear, ask before writing cards.
 
 **Font size rules (mandatory)**:
 | Element | Canvas min | Mobile equiv |
@@ -227,6 +241,8 @@ Report completed steps clearly:
 - `references/card-news-guide.md` — Design rules, card types, color themes
 - `references/card-template-guide.md` — How to write Card TSX components
 - `references/design-system.md` — Typography, spacing, mobile readability
+- `references/magazine-styles.md` — 6 Japanese magazine style palettes, typography, layout, Remotion constants
+- `references/art-direction.md` — 9-layer image prompt structure, text zones, lighting, camera directives
 
 ## Settings
 

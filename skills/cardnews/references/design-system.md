@@ -31,14 +31,37 @@
 
 ## Colors
 
-### Base Palette
+### Base Palette (fallback)
 - Deep black: `#0A0A0A`
 - Off-white: `#FAFAFA`
 - Text on dark: `#FAFAFA` (primary), `rgba(250,250,250,0.7)` (secondary)
 - Text on light: `#0A0A0A` (primary), `#555555` (secondary)
-- Page numbers: `rgba(255,255,255,0.4)` (dark), `rgba(0,0,0,0.3)` (light)
+- Page numbers: `rgba(255,255,255,0.35)` on dark overlays
 
-### Gradient Overlays
+### Magazine Style Palettes
+
+> See `magazine-styles.md` for full details. Quick reference below.
+
+| Style | Primary | Background | Accent | Overlay Tone |
+|-------|---------|------------|--------|-------------|
+| BRUTUS | #1A1A1A | #F5F0E8 | #D62B2B (red) | Black, aggressive |
+| POPEYE | #1A1A1A | #F7F4EE | #4A7C9E (blue) | Black, gentle warm |
+| Casa BRUTUS | #2C2C2C | #F2EDE5 | #1C4E8A (blueprint) | Black, moderate |
+| OLIVE | #8B7B6B | #F0E8D5 | #7B9E6B (olive) | Warm brown |
+| SWITCH | #1A1A1A | #F5F2EC | (none — photo-led) | Black, minimal |
+| Pen | #111111 | #FAFAF7 | #C4381E (red, rare) | Black, barely there |
+
+### Gradient Overlays (by card type)
+
+| Card Type | Overlay Function |
+|-----------|-----------------|
+| Cover | Light overlay — image is the star |
+| Content | Heavy overlay — text legibility first |
+| Closing | Light overlay — CTA focused |
+
+Exact gradient values per style: see `magazine-styles.md` Remotion Constants.
+
+### Legacy Overlays (compat)
 - Image text readability: `linear-gradient(to bottom, transparent 40%, rgba(0,0,0,0.8) 100%)`
 - Vertical video blur bg: `blur(36px) saturate(0.95) brightness(0.45)`
 

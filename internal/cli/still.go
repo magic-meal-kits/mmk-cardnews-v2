@@ -46,6 +46,7 @@ func StillCmd() *cobra.Command {
 					"src/index.ts", "CardStill",
 					"--props", props,
 					"--output", outFile,
+					"--frame", "60",
 				)
 				c.Dir = projectDir
 				c.Stdout = os.Stdout

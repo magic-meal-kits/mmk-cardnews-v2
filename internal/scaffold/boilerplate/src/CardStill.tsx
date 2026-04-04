@@ -17,5 +17,10 @@ export const CardStill: React.FC<CardStillProps> = ({ cardIndex }) => {
     );
   }
 
-  return <CardComponent durationInFrames={999} />;
+  return (
+    <>
+      <style>{`@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap');`}</style>
+      <CardComponent durationInFrames={999} />
+    </>
+  );
 };
