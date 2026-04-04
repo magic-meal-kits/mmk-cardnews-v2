@@ -5,7 +5,7 @@ description: This skill should be used when the user asks to "카드뉴스 만�
 
 # Card News Generator (카드뉴스)
 
-> Topic → Research → Plan → AI Images → React Card Components → PNG/MP4/PDF
+> Topic → Research → Plan → AI Images → React Card Components → PNG Stills (+ MP4)
 
 ---
 
@@ -23,8 +23,7 @@ description: This skill should be used when the user asks to "카드뉴스 만�
 ├── src/data.ts                         # Timing + subtitle data
 ├── public/card-*.png                   # AI-generated images
 ├── out/stills/card-*.png               # Exported PNG stills
-├── out/output.mp4                      # Exported video
-└── out/carousel.pdf                    # LinkedIn PDF carousel
+└── out/output.mp4                      # Exported video (optional)
 ```
 
 `SKILL_DIR` = directory where this SKILL.md lives (for references).
@@ -56,7 +55,7 @@ Report available features:
 ```
 환경 확인 완료!
 ✅ 카드뉴스 생성 (Remotion React)
-✅ PNG/PDF 내보내기
+✅ PNG 이미지 렌더링
 ✅/❌ AI 이미지 생성 (Gemini)
 ✅/❌ 영상 렌더링 (MP4)
 ```
@@ -198,21 +197,18 @@ Options: 진행 / 수정 요청
 
 ### Step 7: Export
 
-Export based on user needs:
+**Always** render PNG stills — this step is mandatory, not optional.
 
-**PNG stills (Instagram carousel)**:
+**PNG stills (always run)**:
 ```bash
 mmk-cn still "{output}"
 ```
 
-**MP4 video**:
+After rendering, display each PNG image to the user for review.
+
+**MP4 video (optional, only if user requests)**:
 ```bash
 mmk-cn render "{output}"
-```
-
-**PDF carousel (LinkedIn)**:
-```bash
-mmk-cn pdf "{output}/out/stills"
 ```
 
 **Checkpoint** — AskUserQuestion:
@@ -233,7 +229,8 @@ Report completed steps clearly:
 ✅ Step 3: 프로젝트 생성 → {output}/
 ✅ Step 4: 이미지 → public/card-*.png
 ✅ Step 5: 카드 컴포넌트 → src/cards/
-❌ Step 6-7: (건너뜀)
+✅ Step 7: PNG 렌더링 → out/stills/
+❌ Step 6: (건너뜀)
 ```
 
 ## References
