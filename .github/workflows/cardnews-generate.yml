@@ -118,6 +118,25 @@ jobs:
 
             When done, all generated files must exist at the output path. Do not commit anything.
 
+      - name: Render card news stills
+        run: |
+          OUTPUT="${{ steps.branch.outputs.output }}"
+
+          if [[ ! -d "$OUTPUT" ]]; then
+            echo "Skipping render: output directory not found"
+            exit 0
+          fi
+
+          echo "=== Installing Remotion dependencies ==="
+          cd "$OUTPUT" && npm install
+          cd "$GITHUB_WORKSPACE"
+
+          echo "=== Rendering card stills (Remotion → PNG) ==="
+          ./dist/mmk-cn still "$OUTPUT"
+
+          echo "=== Rendered stills ==="
+          ls -la "$OUTPUT/out/stills/" 2>/dev/null || echo "No stills found"
+
       - name: Commit and create PR
         env:
           GH_TOKEN: ${{ github.token }}
@@ -148,9 +167,10 @@ jobs:
           # Count generated artifacts for the PR body
           IMAGE_COUNT=$(ls "$OUTPUT/public/card-"*.png 2>/dev/null | wc -l | tr -d ' ')
           CARD_COUNT=$(ls "$OUTPUT/src/cards/Card"[0-9]*.tsx 2>/dev/null | wc -l | tr -d ' ')
+          STILL_COUNT=$(ls "$OUTPUT/out/stills/card-"*.png 2>/dev/null | wc -l | tr -d ' ')
 
           git commit -m "feat: card news — ${TOPIC}" \
-            -m "Slides: ${SLIDES} | Style: ${STYLE} | Images: ${IMAGE_COUNT} | Cards: ${CARD_COUNT}"
+            -m "Slides: ${SLIDES} | Style: ${STYLE} | Images: ${IMAGE_COUNT} | Cards: ${CARD_COUNT} | Stills: ${STILL_COUNT}"
 
           git push origin "$BRANCH"
 
@@ -160,22 +180,24 @@ jobs:
           ## Card News: ${TOPIC}
 
           **Slides**: ${SLIDES} | **Style**: ${STYLE}
-          **Images generated**: ${IMAGE_COUNT} | **Card components**: ${CARD_COUNT}
+          **AI images**: ${IMAGE_COUNT} | **Card components**: ${CARD_COUNT} | **Rendered stills**: ${STILL_COUNT}
 
-          ### Generated files
+          ### Card news stills (final output)
+          See \`${OUTPUT}/out/stills/\` — these are the rendered card news PNGs with text + images composited.
+
+          ### All generated files
+          - \`${OUTPUT}/out/stills/\` — Final rendered card news PNGs
           - \`${OUTPUT}/research.md\` — Research notes
           - \`${OUTPUT}/plan.md\` — Card news plan
-          - \`${OUTPUT}/src/cards/\` — React card components
-          - \`${OUTPUT}/public/\` — Gemini-generated images
+          - \`${OUTPUT}/src/cards/\` — React card components (source)
+          - \`${OUTPUT}/public/\` — Gemini-generated background images
 
-          ### Preview locally
+          ### Preview / re-export locally
           \`\`\`bash
           cd ${OUTPUT} && npm install
-          mmk-cn preview ${OUTPUT}   # Remotion Studio at localhost:3000
-          # or export:
-          mmk-cn still ${OUTPUT}     # PNG stills → out/stills/
-          mmk-cn render ${OUTPUT}    # MP4 video  → out/output.mp4
-          mmk-cn pdf ${OUTPUT}/out/stills  # PDF carousel
+          mmk-cn preview .           # Remotion Studio at localhost:3000
+          mmk-cn render .            # MP4 video  → out/output.mp4
+          mmk-cn pdf out/stills      # PDF carousel
           \`\`\`
           EOF
           )" \
