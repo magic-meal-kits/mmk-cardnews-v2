@@ -129,13 +129,14 @@ jobs:
 
           echo "=== Installing Remotion dependencies ==="
           cd "$OUTPUT" && npm install
-          cd "$GITHUB_WORKSPACE"
 
           echo "=== Rendering card stills (Remotion → PNG) ==="
-          ./dist/mmk-cn still "$OUTPUT"
+          "$GITHUB_WORKSPACE/dist/mmk-cn" still .
 
           echo "=== Rendered stills ==="
-          ls -la "$OUTPUT/out/stills/" 2>/dev/null || echo "No stills found"
+          ls -la out/stills/ 2>/dev/null || echo "No stills found"
+
+          cd "$GITHUB_WORKSPACE"
 
       - name: Commit and create PR
         env:
